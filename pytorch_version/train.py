@@ -65,12 +65,12 @@ def train(transformer, epoch, num_fold):
         pass
 
     kf = KFold(n_splits=num_fold, shuffle=True, random_state=42)
-    df = pd.read_csv('../data/new_data/train.csv')
+    df = pd.read_csv('data/new_data/resized_aptos_2019/labels/trainLabels19.csv')
     for cv_num, (train_list, val_list) in enumerate(kf.split(df)):
         best_qk = 0
         best_loss = np.inf
         for e in T(range(epoch)):
-            train_dataset = DRDataset('../data/new_data/train.csv', train_list, dim, transformer)
+            train_dataset = DRDataset('data/new_data/resized_aptos_2019/labels/trainLabels19.csv', train_list, dim, transformer)
             train_data_loader = torch.utils.data.DataLoader(
                 train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_worker)
             model.train()
@@ -120,7 +120,7 @@ def eval(val_list, transformer):
     running_loss = 0.0
     predictions = []
     actual_labels = []
-    val_dataset = DRDataset('../data/new_data/train.csv', val_list, dim, transformer)
+    val_dataset = DRDataset('data/new_data/resized_aptos_2019/labels/trainLabels19.csv', val_list, dim, transformer)
     val_data_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size//2, shuffle=True, num_workers=num_worker)
     model.eval()
     for data, labels in T(val_data_loader):
@@ -140,6 +140,6 @@ def eval(val_list, transformer):
 
 
 kf = KFold(n_splits=num_fold)
-df = pd.read_csv('../data/new_data/train.csv')
+df = pd.read_csv('data/new_data/resized_aptos_2019/labels/trainLabels19.csv')
 train(transform,
     epochs, 5)
