@@ -25,7 +25,7 @@ class DRDataset(Dataset):
         return len(self.idx_list)
 
     def __getitem__(self, item):
-        img_name = os.path.join('../data/new_data/train_images',
+        img_name = os.path.join('data/new_data/resized_aptos_2019/resized_train_19',
                                 self.data.loc[self.idx_list[item], 'id_code'] + '.png')
         image = Image.open(img_name)
         image = image.resize((self.dim, self.dim), resample=Image.BILINEAR)
@@ -46,7 +46,7 @@ class DRDatasetAlbumentation(Dataset):
         return len(self.idx_list)
 
     def __getitem__(self, item):
-        img_name = os.path.join('../data/new_data/train_images',
+        img_name = os.path.join('data/new_data/resized_aptos_2019/resized_train_19',
                                 self.data.loc[self.idx_list[item], 'id_code'] + '.png')
         image = Image.open(img_name)
         image_np = np.float32(np.asarray(image))
