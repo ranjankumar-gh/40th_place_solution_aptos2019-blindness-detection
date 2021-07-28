@@ -35,14 +35,15 @@ class RetinopathyDatasetTest(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        img_name = os.path.join('../data/test_images', self.data.loc[idx, 'id_code'] + '.png')
+      
+        img_name = os.path.join('data/new_data/resized_aptos_2019/resized_test_19', self.data.loc[idx, 'id_code'] + '.png')
         image = Image.open(img_name)
         image = image.resize((self.dim, self.dim), resample=Image.BILINEAR)
         image = self.transform(image)
         return {'image': image}
 
 
-test_dataset = RetinopathyDatasetTest('../data/new_data/sample_submission.csv', 256, transform)
+test_dataset = RetinopathyDatasetTest('data/new_data/resized_aptos_2019/sample_submission.csv', 256, transform)
 test_data_loader = torch.utils.data.DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=0)
 test_preds = np.zeros((len(test_dataset), 1))
 tk0 = tqdm(test_data_loader)
@@ -66,6 +67,6 @@ for i, pred in enumerate(test_preds):
         test_preds[i] = 4
 
 
-sample = pd.read_csv("data/new_data/sample_submission.csv")
+sample = pd.read_csv("data/new_data/resized_aptos_2019/sample_submission.csv")
 sample.diagnosis = test_preds.astype(int)
 sample.to_csv("submission.csv", index=False)
