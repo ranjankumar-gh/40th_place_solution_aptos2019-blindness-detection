@@ -26,7 +26,7 @@ batch_size = 48
 dim = 256
 num_fold = 5
 epochs = 10
-step_size = 4*int(len(os.listdir('../data/new_data/resized_aptos_2019/resized_train_19'))*(1.-1/num_fold)/batch_size)
+step_size = 4*int(len(os.listdir('data/new_data/resized_aptos_2019/resized_train_19'))*(1.-1/num_fold)/batch_size)
 model_dir = 'resnet101_mse_dim_64'
 model = DRModel(device)
 
