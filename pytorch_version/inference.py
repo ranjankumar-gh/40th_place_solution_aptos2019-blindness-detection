@@ -68,5 +68,5 @@ for i, pred in enumerate(test_preds):
 
 
 sample = pd.read_csv("/content/data/new_data/resized_aptos_2019/labels/trainLabels19.csv")
-sample.diagnosis = pred.astype(int)
+sample.diagnosis = test_preds.astype(int)
 sample.to_csv("/content/submission.csv", index=False)
