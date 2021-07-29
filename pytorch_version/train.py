@@ -113,7 +113,9 @@ def train(transformer, epoch, num_fold):
                     'optimizer_state_dict': optimizer.state_dict(),
                     'loss': running_loss,
                     'kappa': best_qk
-                    }, 'models/'+model_dir+'/'+model_dir+'_fold_'+str(cv_num)+'.pth')
+                    }, 
+                    #'models/'+model_dir+'/'+model_dir+'_fold_'+str(cv_num)+'.pth')
+                    'models/'+'best_model.pth')
 
 
 def eval(val_list, transformer):

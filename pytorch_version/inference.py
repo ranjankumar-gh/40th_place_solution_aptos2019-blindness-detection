@@ -52,8 +52,8 @@ for i, x_batch in enumerate(tk0):
     pred = model(x_batch.to(device))
     test_preds[i * 32:(i + 1) * 32] = pred.detach().cpu().squeeze().numpy().ravel().reshape(-1, 1)
 
+#coef = [0.5, 1.5, 2.5, 3.5]
 coef = [0.5, 1.5, 2.5, 3.5]
-
 for i, pred in enumerate(test_preds):
     if pred < coef[0]:
         test_preds[i] = 0
