@@ -59,7 +59,7 @@ for i, x_batch in enumerate(tk0):
 #3.1268313658701907
 #3.2926724085868417
 
-coef = [0.7043314282343803, 1.3705476070376668, 2.1951830069323504, 3.1268313658701907]
+coef = [1.1, 1.5, 2.5, 3.5]
 for i, pred in enumerate(test_preds):
     if pred < coef[0]:
         test_preds[i] = 0
