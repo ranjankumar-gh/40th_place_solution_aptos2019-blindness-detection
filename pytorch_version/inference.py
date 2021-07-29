@@ -6,11 +6,11 @@ from torch.utils.data import Dataset
 import torch
 from torchvision import transforms
 import os
-from pytorch_version.model import DRModel
+from model import DRModel
 device = torch.device("cuda:0")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 model = DRModel(device)
-checkpt = torch.load('models/resnet101_mse.pth')
+checkpt = torch.load('models/resnet101_mse_dim_64/resnet101_mse_dim_64_fold_4.pth')
 transform = transforms.Compose([
     transforms.Resize(128),
     transforms.CenterCrop(128),
