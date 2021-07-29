@@ -75,4 +75,5 @@ for i, pred in enumerate(test_preds):
 #test_preds.shape = (1,len(test_preds))
 sample = pd.read_csv("/content/data/new_data/resized_aptos_2019/labels/testLabels19.csv")
 #sample.diagnosis = pd.Series(test_preds[0])
+sample.diagnosis = test_preds.astype(int)
 sample.to_csv("/content/submission.csv", index=False)
