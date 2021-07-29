@@ -10,7 +10,7 @@ from model import DRModel
 device = torch.device("cuda:0")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 model = DRModel(device)
-checkpt = torch.load('/content/models/resnet101_mse_dim_64/resnet101_mse_dim_64_fold_4.pth')
+checkpt = torch.load('/content/models/best_model.pth')
 transform = transforms.Compose([
     transforms.Resize(128),
     transforms.CenterCrop(128),
