@@ -11,7 +11,9 @@ from model import DRModel
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 model = DRModel(device)
-checkpt = torch.load('/content/models/best_model.pth')
+
+checkpt = torch.load('/content/models/best_model.pth', map_location=device)
+
 transform = transforms.Compose([
     transforms.Resize(128),
     transforms.CenterCrop(128),
