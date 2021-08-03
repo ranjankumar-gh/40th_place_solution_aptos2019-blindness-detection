@@ -7,7 +7,8 @@ import torch
 from torchvision import transforms
 import os
 from model import DRModel
-device = torch.device("cuda:0")
+#device = torch.device("cuda:0")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 model = DRModel(device)
 checkpt = torch.load('/content/models/best_model.pth')
