@@ -25,11 +25,11 @@ class DRDataset(Dataset):
         return len(self.idx_list)
 
     def __getitem__(self, item):
-        img_name = os.path.join('data/new_data/resized_aptos_2019/resized_train_19',
-                                self.data.loc[self.idx_list[item], 'id_code'] + '.jpg')
+        img_name = os.path.join('data/train',
+                                self.data.loc[self.idx_list[item], 'image'] + '.jpeg')
         image = Image.open(img_name)
         image = image.resize((self.dim, self.dim), resample=Image.BILINEAR)
-        label = torch.FloatTensor([self.data.loc[self.idx_list[item], 'diagnosis']])
+        label = torch.FloatTensor([self.data.loc[self.idx_list[item], 'level']])
         return self.transformer(image), label
 
 
@@ -46,8 +46,8 @@ class DRDatasetAlbumentation(Dataset):
         return len(self.idx_list)
 
     def __getitem__(self, item):
-        img_name = os.path.join('data/new_data/resized_aptos_2019/resized_train_19',
-                                self.data.loc[self.idx_list[item], 'id_code'] + '.jpg')
+        img_name = os.path.join('data/train',
+                                self.data.loc[self.idx_list[item], 'image'] + '.jpeg')
         image = Image.open(img_name)
         image_np = np.float32(np.asarray(image))
         augmented = self.transformer(image=image_np)
@@ -59,6 +59,6 @@ class DRDatasetAlbumentation(Dataset):
             1, image_np.shape[0], image_np.shape[1], image_np.shape[2]).swapaxes(0, 3)
         image = image.reshape(image.shape[0], image.shape[1], image.shape[2])
         image = torch.FloatTensor(image)
-        label = torch.FloatTensor([self.data.loc[self.idx_list[item], 'diagnosis']])
+        label = torch.FloatTensor([self.data.loc[self.idx_list[item], 'level']])
         return image, label
 

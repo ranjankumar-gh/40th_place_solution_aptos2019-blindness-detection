@@ -26,7 +26,7 @@ batch_size = 48
 dim = 256
 num_fold = 5
 epochs = 10
-step_size = 4*int(len(os.listdir('data/new_data/resized_aptos_2019/resized_train_19'))*(1.-1/num_fold)/batch_size)
+step_size = 4*int(len(os.listdir('data/train'))*(1.-1/num_fold)/batch_size)
 model_dir = 'resnet101_mse_dim_64'
 model = DRModel(device)
 
@@ -65,12 +65,12 @@ def train(transformer, epoch, num_fold):
         pass
 
     kf = KFold(n_splits=num_fold, shuffle=True, random_state=42)
-    df = pd.read_csv('data/new_data/resized_aptos_2019/labels/trainLabels19.csv')
+    df = pd.read_csv('data/trainLabels.csv')
     for cv_num, (train_list, val_list) in enumerate(kf.split(df)):
         best_qk = 0
         best_loss = np.inf
         for e in T(range(epoch)):
-            train_dataset = DRDataset('data/new_data/resized_aptos_2019/labels/trainLabels19.csv', train_list, dim, transformer)
+            train_dataset = DRDataset('data/trainLabels.csv', train_list, dim, transformer)
             train_data_loader = torch.utils.data.DataLoader(
                 train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_worker)
             model.train()
@@ -115,14 +115,14 @@ def train(transformer, epoch, num_fold):
                     'kappa': best_qk
                     }, 
                     #'models/'+model_dir+'/'+model_dir+'_fold_'+str(cv_num)+'.pth')
-                    'models/'+'best_model.pth')
+                    'drive/MyDrive/projects/DR/eyepacs_cropped_train_test_splitted/'+'best_model.pth')
 
 
 def eval(val_list, transformer):
     running_loss = 0.0
     predictions = []
     actual_labels = []
-    val_dataset = DRDataset('data/new_data/resized_aptos_2019/labels/trainLabels19.csv', val_list, dim, transformer)
+    val_dataset = DRDataset('data/trainLabels.csv', val_list, dim, transformer)
     val_data_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size//2, shuffle=True, num_workers=num_worker)
     model.eval()
     for data, labels in T(val_data_loader):
@@ -142,6 +142,6 @@ def eval(val_list, transformer):
 
 
 kf = KFold(n_splits=num_fold)
-df = pd.read_csv('data/new_data/resized_aptos_2019/labels/trainLabels19.csv')
+df = pd.read_csv('data/trainLabels.csv')
 train(transform,
     epochs, 5)
