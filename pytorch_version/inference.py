@@ -12,7 +12,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 model = DRModel(device)
 
-checkpt = torch.load('/content/models/best_model.pth', map_location=device)
+checkpt = torch.load('/content/models/eyepacs_best_model.pth', map_location=device)
 
 transform = transforms.Compose([
     transforms.Resize(128),
@@ -39,14 +39,14 @@ class RetinopathyDatasetTest(Dataset):
 
     def __getitem__(self, idx):
       
-        img_name = os.path.join('/content/data/new_data/resized_aptos_2019/resized_test_19', self.data.loc[idx, 'id_code'] + '.jpg')
+        img_name = os.path.join('/content/data/test', self.data.loc[idx, 'image'] + '.jpeg')
         image = Image.open(img_name)
         image = image.resize((self.dim, self.dim), resample=Image.BILINEAR)
         image = self.transform(image)
         return {'image': image}
 
 
-test_dataset = RetinopathyDatasetTest('/content/data/new_data/resized_aptos_2019/labels/testLabels19.csv', 256, transform)
+test_dataset = RetinopathyDatasetTest('/content/data/testLabels.csv', 256, transform)
 test_data_loader = torch.utils.data.DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=0)
 test_preds = np.zeros((len(test_dataset), 1))
 tk0 = tqdm(test_data_loader)
@@ -76,7 +76,7 @@ for i, pred in enumerate(test_preds):
         test_preds[i] = 4
 
 #test_preds.shape = (1,len(test_preds))
-sample = pd.read_csv("/content/data/new_data/resized_aptos_2019/labels/testLabels19.csv")
+sample = pd.read_csv("/content/data/testLabels.csv")
 #sample.diagnosis = pd.Series(test_preds[0])
-sample.diagnosis = test_preds.astype(int)
+sample.label = test_preds.astype(int)
 sample.to_csv("/content/submission.csv", index=False)
