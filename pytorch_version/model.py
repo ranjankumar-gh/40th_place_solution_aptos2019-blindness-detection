@@ -11,6 +11,6 @@ def DRModel(device):
     
     num_features = model.fc.in_features
     model.fc = nn.Linear(2048, 1)
-    model.load_state_dict(torch.load("drive/MyDrive/projects/DR/aptos_best_model.pth")['model_state_dict'])
+    model.load_state_dict(torch.load("/content/drive/MyDrive/projects/DR/aptos_best_model.pth")['model_state_dict'])
     model = model.to(device)
     return model
