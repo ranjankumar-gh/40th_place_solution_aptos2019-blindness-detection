@@ -117,7 +117,7 @@ def train(transformer, epoch, num_fold):
                     'kappa': best_qk
                     }, 
                     #'models/'+model_dir+'/'+model_dir+'_fold_'+str(cv_num)+'.pth')
-                    'drive/MyDrive/projects/DR/'+'eyepacs_best_model_withaug.pth')
+                    'drive/MyDrive/projects/DR/'+'eyepacs_best_model_withaug2.pth')
 
 
 def eval(val_list, transformer):
