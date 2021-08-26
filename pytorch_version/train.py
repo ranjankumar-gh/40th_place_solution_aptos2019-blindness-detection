@@ -3,7 +3,8 @@ import sys
 import torch
 from torch import optim, nn
 from torchvision import transforms
-from DRDataset import DRDataset
+#from DRDataset import DRDataset
+from DRDataset import DRDatasetAlbumentation
 from model import DRModel
 from cyclic_lr import get_lr, triangular_lr, set_lr
 from kappa import quadratic_kappa
@@ -37,16 +38,17 @@ model = DRModel(device)
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225])
     ])'''
-transform = Compose([
-  Resize(width=256, height=256),
+transform = transforms.Compose([
+  transforms.Resize(size=256),
   transforms.CenterCrop(224),
-  Normalize(mean=[0.485, 0.456, 0.406],
-                     std=[0.229, 0.224, 0.225]),
-  HorizontalFlip(),
-  OneOf([Rotate(limit=10),
-  RandomBrightnessContrast(),
-  RandomScale(scale_limit=0.2)],
-  )])
+  transforms.ToTensor(),
+  transforms.RandomHorizontalFlip(),
+  transforms.ColorJitter(),
+  transforms.RandomAffine(10),
+  transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                     std=[0.229, 0.224, 0.225])
+  ])
+ # )])
 plist = [
         {'params': model.layer4.parameters(), 'lr': 1e-5, 'weight': 1e-4},
         {'params': model.fc.parameters(), 'lr': 1e-4}
@@ -70,7 +72,7 @@ def train(transformer, epoch, num_fold):
         best_qk = 0
         best_loss = np.inf
         for e in T(range(epoch)):
-            train_dataset = DRDataset('data/trainLabels.csv', train_list, dim, transformer)
+            train_dataset = DRDatasetAlbumentation('data/trainLabels.csv', train_list, dim, transformer)
             train_data_loader = torch.utils.data.DataLoader(
                 train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_worker)
             model.train()
@@ -122,7 +124,7 @@ def eval(val_list, transformer):
     running_loss = 0.0
     predictions = []
     actual_labels = []
-    val_dataset = DRDataset('data/trainLabels.csv', val_list, dim, transformer)
+    val_dataset = DRDatasetAlbumentation('data/trainLabels.csv', val_list, dim, transformer)
     val_data_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size//2, shuffle=True, num_workers=num_worker)
     model.eval()
     for data, labels in T(val_data_loader):
