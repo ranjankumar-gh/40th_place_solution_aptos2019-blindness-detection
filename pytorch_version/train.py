@@ -22,7 +22,7 @@ if platform.system() == 'Windows':
 else:
     num_worker = 4
 
-device = torch.device("cuda:0")
+device = device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 batch_size = 48
 dim = 256
 num_fold = 5
