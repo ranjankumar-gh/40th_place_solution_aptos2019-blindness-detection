@@ -3,8 +3,8 @@ import sys
 import torch
 from torch import optim, nn
 from torchvision import transforms
-#from DRDataset import DRDataset
-from DRDataset import DRDatasetAlbumentation
+from DRDataset import DRDataset
+#from DRDataset import DRDatasetAlbumentation
 from model import DRModel
 from cyclic_lr import get_lr, triangular_lr, set_lr
 from kappa import quadratic_kappa
@@ -72,7 +72,7 @@ def train(transformer, epoch, num_fold):
         best_qk = 0
         best_loss = np.inf
         for e in T(range(epoch)):
-            train_dataset = DRDatasetAlbumentation('data/trainLabels.csv', train_list, dim, transformer)
+            train_dataset = DRDataset('data/trainLabels.csv', train_list, dim, transformer)
             train_data_loader = torch.utils.data.DataLoader(
                 train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_worker)
             model.train()
@@ -124,7 +124,7 @@ def eval(val_list, transformer):
     running_loss = 0.0
     predictions = []
     actual_labels = []
-    val_dataset = DRDatasetAlbumentation('data/trainLabels.csv', val_list, dim, transformer)
+    val_dataset = DRDataset('data/trainLabels.csv', val_list, dim, transformer)
     val_data_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size//2, shuffle=True, num_workers=num_worker)
     model.eval()
     for data, labels in T(val_data_loader):
