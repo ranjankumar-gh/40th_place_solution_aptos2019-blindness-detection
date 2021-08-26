@@ -12,7 +12,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 model = DRModel(device)
 
-checkpt = torch.load('/content/models/eyepacs_best_model.pth', map_location=device)
+checkpt = torch.load('/content/drive/MyDrive/projects/DR/eyepacs_best_model_withaug.pth', map_location=device)
 
 transform = transforms.Compose([
     transforms.Resize(128),
