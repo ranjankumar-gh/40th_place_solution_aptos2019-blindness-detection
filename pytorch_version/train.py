@@ -30,23 +30,23 @@ step_size = 4*int(len(os.listdir('data/train'))*(1.-1/num_fold)/batch_size)
 model_dir = 'resnet101_mse_dim_64'
 model = DRModel(device)
 
-transform = transforms.Compose([
+'''transform = transforms.Compose([
     # transforms.Resize(256),
     # transforms.CenterCrop(256),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225])
-    ])
-# transform = Compose([
-#         # Resize(width=256, height=256),
-#         # transforms.CenterCrop(224),
-#         Normalize(mean=[0.485, 0.456, 0.406],
-#                          std=[0.229, 0.224, 0.225]),
-#                     HorizontalFlip(),
-#                     OneOf([Rotate(limit=10),
-#                     RandomBrightnessContrast(),
-#                     RandomScale(scale_limit=0.2)],
-#                           )])
+    ])'''
+transform = Compose([
+  Resize(width=256, height=256),
+  transforms.CenterCrop(224),
+  Normalize(mean=[0.485, 0.456, 0.406],
+                     std=[0.229, 0.224, 0.225]),
+  HorizontalFlip(),
+  OneOf([Rotate(limit=10),
+  RandomBrightnessContrast(),
+  RandomScale(scale_limit=0.2)],
+  )])
 plist = [
         {'params': model.layer4.parameters(), 'lr': 1e-5, 'weight': 1e-4},
         {'params': model.fc.parameters(), 'lr': 1e-4}
@@ -115,7 +115,7 @@ def train(transformer, epoch, num_fold):
                     'kappa': best_qk
                     }, 
                     #'models/'+model_dir+'/'+model_dir+'_fold_'+str(cv_num)+'.pth')
-                    'drive/MyDrive/projects/DR/'+'eyepacs_best_model.pth')
+                    'drive/MyDrive/projects/DR/'+'eyepacs_best_model_withaug.pth')
 
 
 def eval(val_list, transformer):
